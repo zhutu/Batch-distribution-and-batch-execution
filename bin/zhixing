@@ -1,0 +1,26 @@
+#!/usr/bin/expect -f
+set timeout 5
+#set password 1415926
+set IP [lindex $argv 0]
+set user_name [lindex $argv 1]
+set password [lindex $argv 2]
+set command [lindex $argv 3]
+spawn ssh $user_name@$IP
+expect { 
+	"(yes/no)?" { 
+				send "yes\n"
+				expect "assword:"
+				send "$password\n"
+				} 
+	"assword" { 
+			    send "$password\n"
+			   } 
+	   } 
+expect "*$*"
+#send the commnd
+#send "rpm -ivh /root/neo2/leofs_mond-3.3.10-0.x86_64.rpm\r"
+send "$command \r"
+send "exit \r"
+#send "sudo sh sshd_change.sh \r"
+expect eof
+
